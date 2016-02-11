@@ -104,7 +104,9 @@ void mouse_func(int button, int state, int x, int y)
 {
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
-
+		
+		drawMegaPixel(x, y);
+		
 		glutPostRedisplay();
 	}
 
@@ -117,5 +119,11 @@ void loeschLineScan(int x1, int y1, int x2, int y2) {
 }
 
 void drawMegaPixel(int x, int y) {
-
+	glColor3f(1.0, 1.0, 1.0);
+	glBegin(GL_POINTS);
+	for (int i = -2; i <= 2; i++) {
+		glVertex2i(x + i, y + i);
+	}
+	glEnd();
+	glColor3f(0.0, 0.0, 0.0);
 }
