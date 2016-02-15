@@ -34,6 +34,7 @@ void keyboard_func(unsigned char c, int x, int y);
 void mouse_func(int button, int state, int x, int y);
 void loeschLineScan(int x1, int y1, int x2, int y2);
 void drawMegaPixel(int x, int y);
+void swapInts(int &a, int &b);
 
 
 //@@***********************************************************************************@@
@@ -50,10 +51,10 @@ int main(int argc, char **argv)
 
 	init_setup(WINDOW_XS, WINDOW_YS, WINDOW_NAME);
 	
-	xAry[0] = 237;
-	xAry[1] = 362;
-	yAry[0] = 12;
-	yAry[1] = 12;
+	xAry[0] = 175;
+	xAry[1] = 425;
+	yAry[0] = 175;
+	yAry[1] = 425;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -73,7 +74,7 @@ void display_func(void)
 	glColor3f(1.0, 1.0, 1.0);						// set color (grey)
 	glLineWidth(1.0);
 
-	loeschLineScan(xAry[0], yAry[0], xAry[1], yAry[1]);
+	loeschLineScan(xAry[1], yAry[1], xAry[0], yAry[0]);
 	drawMegaPixel(200, 400);
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
@@ -124,6 +125,11 @@ void mouse_func(int button, int state, int x, int y)
 
 // This is the Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(int x1, int y1, int x2, int y2) {
+	if (x1 > x2) {
+		swapInts(x1, x2);
+		swapInts(y1, y2);
+	}
+
 	int dY = y2 - y1;
 	int dX = x2 - x1;
 	int dFa = 2 * (dY - dX);
@@ -154,4 +160,10 @@ void drawMegaPixel(int x, int y) {
 		glVertex2i(_x + 3, (_y + i));
 	}
 	glEnd();
+}
+
+void swapInts(int &a, int &b) {
+	int temp = a;
+	a = b;
+	b = temp;
 }
