@@ -73,6 +73,7 @@ void display_func(void)
 	glColor3f(1.0, 1.0, 1.0);						// set color (grey)
 	glLineWidth(1.0);
 
+	loeschLineScan(xAry[0], yAry[0], xAry[1], yAry[1]);
 	drawMegaPixel(200, 400);
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
@@ -123,8 +124,26 @@ void mouse_func(int button, int state, int x, int y)
 
 // This is the Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(int x1, int y1, int x2, int y2) {
+	int dY = y2 - y1;
+	int dX = x2 - x1;
+	int dFa = 2 * (dY - dX);
+	int dFb = 2 * dY;
+	int p = 2 * dY - dX;
+	int currX = 0;
+	int currY = 0;
 
-
+	glBegin(GL_POINTS);
+	for (int k = 0; k < dX; k++) {
+		if (p < 0) 
+			p += dFb;
+		else {
+			currY++;
+			p += dFa;
+		}
+		glVertex2i(x1 + k, y1 + currY);
+	}
+	glEnd();
+	
 }
 
 void drawMegaPixel(int x, int y) {
