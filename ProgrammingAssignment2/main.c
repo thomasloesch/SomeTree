@@ -38,7 +38,10 @@ void drawMegaPixel(int x, int y);
 
 //@@***********************************************************************************@@
 // Global Variables
-
+int _x = 300;
+int _y = 300;
+int xAry[44];
+int yAry[44];
 
 //@@***********************************************************************************@@
 int main(int argc, char **argv)
@@ -47,6 +50,10 @@ int main(int argc, char **argv)
 
 	init_setup(WINDOW_XS, WINDOW_YS, WINDOW_NAME);
 	
+	xAry[0] = 237;
+	xAry[1] = 362;
+	yAry[0] = 12;
+	yAry[1] = 12;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -63,9 +70,10 @@ void display_func(void)
 	glClearColor(0.0, 0.0, 0.0, 1.0);				// background color (white)
 	glClear(GL_COLOR_BUFFER_BIT);					// clearing the buffer not to keep the color
 	
-	glColor3f(0.7, 0.7, 0.7);						// set color (grey)
+	glColor3f(1.0, 1.0, 1.0);						// set color (grey)
 	glLineWidth(1.0);
 
+	drawMegaPixel(200, 400);
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
 
@@ -105,14 +113,15 @@ void mouse_func(int button, int state, int x, int y)
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
 		
-		drawMegaPixel(x, y);
+		_x = x;
+		_y = WINDOW_YS - y;
 		
 		glutPostRedisplay();
 	}
 
 }	// end of mouse_func()
 
-// This is the Bresenham-based linescan function
+// This is the Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(int x1, int y1, int x2, int y2) {
 
 
@@ -120,10 +129,10 @@ void loeschLineScan(int x1, int y1, int x2, int y2) {
 
 void drawMegaPixel(int x, int y) {
 	glColor3f(1.0, 1.0, 1.0);
-	glBegin(GL_POINTS);
+	glBegin(GL_LINES);
 	for (int i = -2; i <= 2; i++) {
-		glVertex2i(x + i, y + i);
+		glVertex2i(_x - 2, (_y + i));
+		glVertex2i(_x + 3, (_y + i));
 	}
 	glEnd();
-	glColor3f(0.0, 0.0, 0.0);
 }
