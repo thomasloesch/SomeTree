@@ -138,18 +138,28 @@ void loeschLineScan(int x1, int y1, int x2, int y2) {
 	int currX = 0;
 	int currY = 0;
 
-	glBegin(GL_POINTS);
-	for (int k = 0; k < dX; k++) {
-		if (p < 0) 
-			p += dFb;
-		else {
-			currY++;
-			p += dFa;
+	if(dY >= 0 && dY <= 1) { // standard case
+		glBegin(GL_POINTS);
+		for (int k = 0; k < dX; k++) {
+			if (p < 0) 
+				p += dFb;
+			else {
+				currY++;
+				p += dFa;
+			}
+			glVertex2i(x1 + k, y1 + currY);
 		}
-		glVertex2i(x1 + k, y1 + currY);
+		glEnd();
 	}
-	glEnd();
-	
+	else if (dY > 1) { // slope greater than 1
+		
+	}
+	else if (dY < 0 && >= -1) { // negative slope
+		
+	}
+	else { // slope must be negative and less than -1
+		
+	}
 }
 
 void drawMegaPixel(int x, int y) {
