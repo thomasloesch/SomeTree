@@ -1,12 +1,12 @@
 /*
-*** FILE NAME   : main.c
-*** DESCRIPTION : This program generates a cosine wave using the opengl libraries
+*** FILE NAME   : main.cpp
+*** DESCRIPTION : This program generates a tree using a self-made implementation of a Bresenham line scan.
 *** DATE        : Jan. 29 2015
 *** WRITTEN By  : Thomas Loesch
 *** NOTES		: 
 */
 
-#include <stdio.h>              // standard C libraries
+#include <stdio.h>              // standard libraries
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
