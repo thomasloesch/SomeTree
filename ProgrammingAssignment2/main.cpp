@@ -33,6 +33,7 @@ void display_func(void);
 void keyboard_func(unsigned char c, int x, int y);
 void mouse_func(int button, int state, int x, int y);
 void loeschLineScan(My2DPoint p1, My2DPoint p2);
+void loeschLineScanMega(My2DPoint p1, My2DPoint p2);
 void drawMegaPixel(int x, int y);
 void swapInts(int &a, int &b);
 void swapPoints(My2DPoint &a, My2DPoint &b);
@@ -40,8 +41,8 @@ void swapPoints(My2DPoint &a, My2DPoint &b);
 
 //@@***********************************************************************************@@
 // Global Variables
-int _x = 300;
-int _y = 300;
+int _x = 425;
+int _y = 425;
 My2DPoint pointAry[22];
 
 //@@***********************************************************************************@@
@@ -52,9 +53,13 @@ int main(int argc, char **argv)
 	init_setup(WINDOW_XS, WINDOW_YS, WINDOW_NAME);
 	
 	pointAry[0].x = 175;
-	pointAry[0].y = 425;
-	pointAry[1].x = 200;
-	pointAry[1].y = 200;
+	pointAry[0].y = 175;
+	pointAry[1].x = 425;
+	pointAry[1].y = 425;
+	pointAry[4].x = 425;
+	pointAry[4].y = 125 + 200;
+	pointAry[5].x = 425;
+	pointAry[5].y = 175;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -77,7 +82,10 @@ void display_func(void)
 	My2DPoint mousePt;
 	mousePt.x = _x;
 	mousePt.y = _y;
-	loeschLineScan(pointAry[0], mousePt);
+	loeschLineScanMega(pointAry[0], pointAry[1]);
+	loeschLineScan(pointAry[0], pointAry[5]);
+	loeschLineScan(pointAry[0], pointAry[1]);
+	loeschLineScan(pointAry[1], pointAry[5]);
 //	drawMegaPixel(200, 400);
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
@@ -210,12 +218,88 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	}
 }
 
+void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
+	if (p1.x > p2.x)		// if the points are in the wrong order, swap them first
+		swapPoints(p1, p2);
+
+	int dY = p2.y - p1.y;
+	int dX = p2.x - p1.x;
+	float m = (float)dY / (float)dX; // slope
+	int dFa;
+	int dFb;
+	int p;
+	int currX = 0;
+	int currY = 0;
+
+	if (m >= 0.0 && m <= 1.0) { // standard case
+		dFa = 10 * dY - 10 * dX;
+		dFb = 10 * dY;
+		p = 10 * dY - 5 * dX;
+
+		for (int k = 0; k <= dX; k += 5) {
+			if (p < 0)
+				p += dFb;
+			else {
+				currY += 5;
+				p += dFa;
+			}
+			drawMegaPixel(p1.x + k, p1.y + currY);
+		}
+	}
+	else if (m > 1.0) { // slope greater than 1 NYI
+		dFa = 2 * (dX - dY);
+		dFb = 2 * dX;
+		p = 2 * dX - dY;
+
+		for (int k = 0; k <= dY; k++) {
+			if (p < 0)
+				p += dFb;
+			else {
+				currX++;
+				p += dFa;
+			}
+			drawMegaPixel(p1.x + currX, p1.y + k);
+		}
+	}
+	else if (m < 0.0 && m >= -1.0) { // negative slope NYI
+		dFa = 2 * (dY + dX);
+		dFb = 2 * dY;
+		p = 2 * dY + dX;
+
+		for (int k = 0; k <= dX; k++) {
+			if (p > 0)
+				p += dFb;
+			else {
+				currY++;
+				p += dFa;
+			}
+			drawMegaPixel(p1.x + k, p1.y - currY);
+		}
+	}
+	else { // slope must be negative and less than -1 NYI
+		dFa = 2 * (dY + dX);
+		dFb = 2 * dX;
+		p = dY - 2 * dX;
+
+		for (int k = 0; k >= dY; k--) {
+			if (p < 0)
+				p += dFb;
+			else {
+				currX++;
+				p += dFa;
+			}
+			if (k % 5 == 0)
+				drawMegaPixel(p1.x + currX, p1.y + k);
+		}
+	}
+}
+
 void drawMegaPixel(int x, int y) {
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	for (int i = -2; i <= 2; i++) {
-		glVertex2i(_x - 2, (_y + i));
-		glVertex2i(_x + 3, (_y + i));
+		glVertex2i(x - 2, (y + i));
+		glVertex2i(x + 3, (y + i));
 	}
 	glEnd();
 }
