@@ -35,6 +35,7 @@ void mouse_func(int button, int state, int x, int y);
 void loeschLineScan(My2DPoint p1, My2DPoint p2);
 void drawMegaPixel(int x, int y);
 void swapInts(int &a, int &b);
+void swapPoints(My2DPoint &a, My2DPoint &b);
 
 
 //@@***********************************************************************************@@
@@ -124,10 +125,8 @@ void mouse_func(int button, int state, int x, int y)
 
 // This is the Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(My2DPoint p1, My2DPoint p2) {
-	if (p1.x > p2.x) {
-		swapInts(p1.x, p2.x); // change to swapPoints func
-		swapInts(p1.y, p2.y);
-	}
+	if (p1.x > p2.x) 
+		swapPoints(p1, p2);
 
 	int dY = p2.y - p1.y;
 	int dX = p2.x - p1.x;
@@ -174,6 +173,12 @@ void drawMegaPixel(int x, int y) {
 
 void swapInts(int &a, int &b) {
 	int temp = a;
+	a = b;
+	b = temp;
+}
+
+void swapPoints(My2DPoint &a, My2DPoint &b) {
+	My2DPoint temp = a;
 	a = b;
 	b = temp;
 }
