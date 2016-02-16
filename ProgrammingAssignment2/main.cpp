@@ -52,9 +52,9 @@ int main(int argc, char **argv)
 	init_setup(WINDOW_XS, WINDOW_YS, WINDOW_NAME);
 	
 	pointAry[0].x = 175;
-	pointAry[0].y = 175;
-	pointAry[1].x = 425;
-	pointAry[1].y = 425;
+	pointAry[0].y = 425;
+	pointAry[1].x = 200;
+	pointAry[1].y = 200;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -74,7 +74,10 @@ void display_func(void)
 	glColor3f(1.0, 1.0, 1.0);						// set color (grey)
 	glLineWidth(1.0);
 
-	loeschLineScan(pointAry[0], pointAry[1]);
+	My2DPoint mousePt;
+	mousePt.x = _x;
+	mousePt.y = _y;
+	loeschLineScan(pointAry[0], mousePt);
 //	drawMegaPixel(200, 400);
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
@@ -143,7 +146,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dY - dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k < dX; k++) {
+		for (int k = 0; k <= dX; k++) {
 			if (p < 0) 
 				p += dFb;
 			else {
@@ -160,7 +163,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dX - dY;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k < dY; k++) {
+		for (int k = 0; k <= dY; k++) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -172,10 +175,38 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		glEnd();
 	}
 	else if (m < 0.0 && m >= -1.0) { // negative slope
-		
+		dFa = 2 * (dY + dX);
+		dFb = 2 * dY;
+		p = 2 * dY + dX;
+
+		glBegin(GL_POINTS);
+		for (int k = 0; k <= dX; k++) {
+			if (p > 0)
+				p += dFb;
+			else {
+				currY++;
+				p += dFa;
+			}
+			glVertex2i(p1.x + k, p1.y - currY);
+		}
+		glEnd();
 	}
 	else { // slope must be negative and less than -1
-		
+		dFa = 2 * (dY + dX);
+		dFb = 2 * dX;
+		p = dY - 2 * dX;
+
+		glBegin(GL_POINTS);
+		for (int k = 0; k >= dY; k--) {
+			if (p < 0)
+				p += dFb;
+			else {
+				currX++;
+				p += dFa;
+			}
+			glVertex2i(p1.x + currX, p1.y + k);
+		}
+		glEnd();
 	}
 }
 
