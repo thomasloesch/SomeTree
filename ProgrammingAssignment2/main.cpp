@@ -75,7 +75,7 @@ void display_func(void)
 	glLineWidth(1.0);
 
 	loeschLineScan(pointAry[0], pointAry[1]);
-	drawMegaPixel(200, 400);
+//	drawMegaPixel(200, 400);
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
 
@@ -125,19 +125,23 @@ void mouse_func(int button, int state, int x, int y)
 
 // This is the Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(My2DPoint p1, My2DPoint p2) {
-	if (p1.x > p2.x) 
+	if (p1.x > p2.x)		// if the points are in the wrong order, swap them first
 		swapPoints(p1, p2);
 
 	int dY = p2.y - p1.y;
 	int dX = p2.x - p1.x;
-	float m = (float)dY / (float)dX;
-	int dFa = 2 * (dY - dX);
-	int dFb = 2 * dY;
-	int p = 2 * dY - dX;
+	float m = (float)dY / (float)dX; // slope
+	int dFa;
+	int dFb;
+	int p;
 	int currX = 0;
 	int currY = 0;
 
 	if(m >= 0.0 && m <= 1.0) { // standard case
+		dFa = 2 * (dY - dX);
+		dFb = 2 * dY;
+		p = 2 * dY - dX;
+
 		glBegin(GL_POINTS);
 		for (int k = 0; k < dX; k++) {
 			if (p < 0) 
@@ -151,7 +155,21 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		glEnd();
 	}
 	else if (m > 1.0) { // slope greater than 1
-		
+		dFa = 2 * (dX - dY);
+		dFb = 2 * dX;
+		p = 2 * dX - dY;
+
+		glBegin(GL_POINTS);
+		for (int k = 0; k < dY; k++) {
+			if (p < 0)
+				p += dFb;
+			else {
+				currX++;
+				p += dFa;
+			}
+			glVertex2i(p1.x + currX, p1.y + k);
+		}
+		glEnd();
 	}
 	else if (m < 0.0 && m >= -1.0) { // negative slope
 		
