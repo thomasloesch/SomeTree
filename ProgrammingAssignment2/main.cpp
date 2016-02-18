@@ -38,6 +38,8 @@ void drawMegaPixel(int x, int y);
 void swapInts(int &a, int &b);
 void swapPoints(My2DPoint &a, My2DPoint &b);
 void drawTree();
+void drawMegaTree();
+void drawGrid();
 
 
 //@@***********************************************************************************@@
@@ -78,68 +80,70 @@ int main(int argc, char **argv)
 	pointAry[10].y = 82;
 	pointAry[11].x = 492;
 	pointAry[11].y = 72;
-	pointAry[12].x = 0;
-	pointAry[12].y = 0;
-	pointAry[13].x = 0;
-	pointAry[13].y = 0;
-	pointAry[14].x = 0;
-	pointAry[14].y = 0;
-	pointAry[15].x = 0;
-	pointAry[15].y = 0;
-	pointAry[16].x = 0;
-	pointAry[16].y = 0;
-	pointAry[17].x = 0;
-	pointAry[17].y = 0;
-	pointAry[18].x = 0;
-	pointAry[18].y = 0;
-	pointAry[19].x = 0;
-	pointAry[19].y = 0;
-	pointAry[20].x = 0;
-	pointAry[20].y = 0;
-	pointAry[21].x = 0;
-	pointAry[21].y = 0;
-	pointAry[22].x = 0;
-	pointAry[22].y = 0;
-	pointAry[23].x = 0;
-	pointAry[23].y = 0;
-	pointAry[24].x = 0;
-	pointAry[24].y = 0;
-	pointAry[25].x = 0;
-	pointAry[25].y = 0;
-	pointAry[26].x = 0;
-	pointAry[26].y = 0;
-	pointAry[27].x = 0;
-	pointAry[27].y = 0;
-	pointAry[28].x = 0;
-	pointAry[28].y = 0;
-	pointAry[29].x = 0;
-	pointAry[29].y = 0;
-	pointAry[30].x = 0;
-	pointAry[30].y = 0;
-	pointAry[31].x = 0;
-	pointAry[31].y = 0;
-	pointAry[32].x = 0;
-	pointAry[32].y = 0;
-	pointAry[33].x = 0;
-	pointAry[33].y = 0;
-	pointAry[34].x = 0;
-	pointAry[34].y = 0;
-	pointAry[35].x = 0;
-	pointAry[35].y = 0;
-	pointAry[36].x = 0;
-	pointAry[36].y = 0;
-	pointAry[37].x = 0;
-	pointAry[37].y = 0;
-	pointAry[38].x = 0;
-	pointAry[38].y = 0;
-	pointAry[39].x = 0;
-	pointAry[39].y = 0;
-	pointAry[40].x = 0;
-	pointAry[40].y = 0;
-	pointAry[41].x = 0;
-	pointAry[41].y = 0;
-	pointAry[42].x = 0;
-	pointAry[42].y = 0;
+	pointAry[12].x = 302;
+	pointAry[12].y = 177;
+	pointAry[13].x = 72;
+	pointAry[13].y = 127;
+	pointAry[14].x = 142;
+	pointAry[14].y = 142;
+	pointAry[15].x = 72;
+	pointAry[15].y = 157;
+	pointAry[16].x = 302;
+	pointAry[16].y = 177;
+	pointAry[17].x = 527;
+	pointAry[17].y = 127;
+	pointAry[18].x = 457;
+	pointAry[18].y = 142;
+	pointAry[19].x = 527;
+	pointAry[19].y = 157;
+	pointAry[20].x = 302;
+	pointAry[20].y = 337;
+	pointAry[21].x = 152;
+	pointAry[21].y = 187;
+	pointAry[22].x = 202;
+	pointAry[22].y = 237;
+	pointAry[23].x = 152;
+	pointAry[23].y = 287;
+	pointAry[24].x = 302;
+	pointAry[24].y = 337;
+	pointAry[25].x = 452;
+	pointAry[25].y = 187;
+	pointAry[26].x = 402;
+	pointAry[26].y = 237;
+	pointAry[27].x = 452;
+	pointAry[27].y = 287;
+	pointAry[28].x = 302;
+	pointAry[28].y = 487;
+	pointAry[29].x = 207;
+	pointAry[29].y = 307;
+	pointAry[30].x = 237;
+	pointAry[30].y = 362;
+	pointAry[31].x = 207;
+	pointAry[31].y = 417;
+	pointAry[32].x = 302;
+	pointAry[32].y = 487;
+	pointAry[33].x = 387;
+	pointAry[33].y = 307;
+	pointAry[34].x = 362;
+	pointAry[34].y = 362;
+	pointAry[35].x = 387;
+	pointAry[35].y = 417;
+	pointAry[36].x = 302;
+	pointAry[36].y = 587;
+	pointAry[37].x = 237;
+	pointAry[37].y = 487;
+	pointAry[38].x = 257;
+	pointAry[38].y = 517;
+	pointAry[39].x = 237;
+	pointAry[39].y = 547;
+	pointAry[40].x = 302;
+	pointAry[40].y = 587;
+	pointAry[41].x = 367;
+	pointAry[41].y = 487;
+	pointAry[42].x = 347;
+	pointAry[42].y = 517;
+	pointAry[43].x = 367;
+	pointAry[43].y = 547;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -156,7 +160,7 @@ void display_func(void)
 	glClearColor(0.0, 0.0, 0.0, 1.0);				// background color (white)
 	glClear(GL_COLOR_BUFFER_BIT);					// clearing the buffer not to keep the color
 	
-	glColor3f(1.0, 1.0, 1.0);						// set color (grey)
+	glColor3f(0.5, 0.5, 0.5);						// set color (white)
 	glLineWidth(1.0);
 
 	My2DPoint mousePt;
@@ -167,7 +171,9 @@ void display_func(void)
 	//loeschLineScan(pointAry[0], pointAry[1]);
 	//loeschLineScan(pointAry[1], pointAry[5]);
 //	drawMegaPixel(200, 400);
+	drawGrid();
 
+	glColor3f(1.0, 1.0, 1.0);
 	drawTree();
 
 	glColor3f(0.0, 0.0, 0.0);		// set color (black)
@@ -229,6 +235,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	int p;
 	int currX = 0;
 	int currY = 0;
+
 
 	if(m >= 0.0 && m <= 1.0) { // standard case
 		dFa = 2 * (dY - dX);
@@ -401,4 +408,20 @@ void swapPoints(My2DPoint &a, My2DPoint &b) {
 void drawTree() {
 	for (int i = 0; i < POINT_ARY_SIZE; i += 2)
 		loeschLineScan(pointAry[i], pointAry[i + 1]);
+}
+
+void drawMegaTree() {
+	for (int i = 0; i < POINT_ARY_SIZE; i += 2)
+		loeschLineScanMega(pointAry[i], pointAry[i + 1]);
+}
+
+void drawGrid() {
+	glBegin(GL_LINES);
+	for (int i = 5; i < WINDOW_YS; i += 5) {
+		glVertex2i(0, i);
+		glVertex2i(WINDOW_XS, i);
+		glVertex2i(i, 0);
+		glVertex2i(i, WINDOW_YS);
+	}
+	glEnd();
 }
