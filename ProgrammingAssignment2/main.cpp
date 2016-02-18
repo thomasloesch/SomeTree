@@ -174,10 +174,7 @@ void display_func(void)
 	drawGrid();
 
 	glColor3f(1.0, 1.0, 1.0);
-	drawTree();
-
-	glColor3f(0.0, 0.0, 0.0);		// set color (black)
-
+	drawMegaTree();
 
 	glFlush();
 }	// end of display_func()
@@ -325,7 +322,7 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 		dFb = 10 * dY;
 		p = 10 * dY - 5 * dX;
 
-		for (int k = 0; k <= dX; k += 5) {
+		for (int k = 0; k < dX; k += 5) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -335,50 +332,49 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 			drawMegaPixel(p1.x + k, p1.y + currY);
 		}
 	}
-	else if (m > 1.0) { // slope greater than 1 NYI
-		dFa = 2 * (dX - dY);
-		dFb = 2 * dX;
-		p = 2 * dX - dY;
+	else if (m > 1.0) { // slope greater than 1
+		dFa = 10 * (dX - dY);
+		dFb = 10 * dX;
+		p = 10 * dX - 5 * dY;
 
-		for (int k = 0; k <= dY; k++) {
+		for (int k = 0; k < dY; k += 5) {
 			if (p < 0)
 				p += dFb;
 			else {
-				currX++;
+				currX += 5;
 				p += dFa;
 			}
 			drawMegaPixel(p1.x + currX, p1.y + k);
 		}
 	}
-	else if (m < 0.0 && m >= -1.0) { // negative slope NYI
-		dFa = 2 * (dY + dX);
-		dFb = 2 * dY;
-		p = 2 * dY + dX;
+	else if (m < 0.0 && m >= -1.0) { // negative slope
+		dFa = 10 * (dY + dX);
+		dFb = 10 * dY;
+		p = 10 * dY + 5 * dX;
 
-		for (int k = 0; k <= dX; k++) {
+		for (int k = 0; k < dX; k += 5) {
 			if (p > 0)
 				p += dFb;
 			else {
-				currY++;
+				currY += 5;
 				p += dFa;
 			}
 			drawMegaPixel(p1.x + k, p1.y - currY);
 		}
 	}
-	else { // slope must be negative and less than -1 NYI
-		dFa = 2 * (dY + dX);
-		dFb = 2 * dX;
-		p = dY - 2 * dX;
+	else { // slope must be negative and less than -1
+		dFa = 10 * (dY + dX);
+		dFb = 10 * dX;
+		p = 5 * dY - 10 * dX;
 
-		for (int k = 0; k >= dY; k--) {
+		for (int k = 0; k > dY; k -= 5) {
 			if (p < 0)
 				p += dFb;
 			else {
-				currX++;
+				currX += 5;
 				p += dFa;
 			}
-			if (k % 5 == 0)
-				drawMegaPixel(p1.x + currX, p1.y + k);
+			drawMegaPixel(p1.x + currX, p1.y + k);
 		}
 	}
 }
