@@ -174,7 +174,7 @@ void display_func(void)
 	drawGrid();
 
 	glColor3f(1.0, 1.0, 1.0);
-	drawMegaTree();
+	drawTree();
 
 	glFlush();
 }	// end of display_func()
@@ -240,7 +240,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dY - dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k <= dX; k++) {
+		for (int k = 0; k < dX; k++) {
 			if (p < 0) 
 				p += dFb;
 			else {
@@ -257,7 +257,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dX - dY;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k <= dY; k++) {
+		for (int k = 0; k < dY; k++) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -274,7 +274,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dY + dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k <= dX; k++) {
+		for (int k = 0; k < dX; k++) {
 			if (p > 0)
 				p += dFb;
 			else {
@@ -291,7 +291,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = dY - 2 * dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k >= dY; k--) {
+		for (int k = 0; k > dY; k--) {
 			if (p < 0)
 				p += dFb;
 			else {
