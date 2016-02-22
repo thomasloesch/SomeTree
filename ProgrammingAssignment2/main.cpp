@@ -35,19 +35,12 @@ void mouse_func(int button, int state, int x, int y);
 void loeschLineScan(My2DPoint p1, My2DPoint p2);
 void loeschLineScanMega(My2DPoint p1, My2DPoint p2);
 void drawMegaPixel(int x, int y);
-void swapInts(int &a, int &b);
 void swapPoints(My2DPoint &a, My2DPoint &b);
 void drawTree();
 void drawMegaTree();
-void drawGrid();
-void drawPoints();
-void lineTest();
-
 
 //@@***********************************************************************************@@
 // Global Variables
-int _x = 425;
-int _y = 425;
 const int POINT_ARY_SIZE = 44;
 My2DPoint pointAry[POINT_ARY_SIZE];
 
@@ -174,17 +167,6 @@ void keyboard_func(unsigned char c, int x, int y)
 {
 	switch(c)
 	{
-		case 'a' :
-		case 'A' :
-			
-			break;
-
-		// shift right when 'd' key is pressed (Extra credit feature 2)
-		case 'd' :
-		case 'D' :
-		
-			break;
-
 		case 'q' :
 		case 'Q' :
 			exit(1);
@@ -197,18 +179,10 @@ void keyboard_func(unsigned char c, int x, int y)
 //@@***********************************************************************************@@
 void mouse_func(int button, int state, int x, int y)
 {
-	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-	{
-		
-		_x = x;
-		_y = WINDOW_YS - y;
-		
-		glutPostRedisplay();
-	}
 
 }	// end of mouse_func()
 
-// This is the Bresenham-based linescan function (DOES NOT use mega pixels)
+// This is a Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	if (p1.x > p2.x)		// if the points are in the wrong order, swap them first
 		swapPoints(p1, p2);
@@ -312,6 +286,7 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	}
 }
 
+// This is a Bresenham-based linescan function using mega pixels
 void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 	if (p1.x > p2.x)		// if the points are in the wrong order, swap them first
 		swapPoints(p1, p2);
@@ -404,6 +379,7 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 	}
 }
 
+// draws a 5x5 square with (x,y) at the center
 void drawMegaPixel(int x, int y) {
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
@@ -414,72 +390,21 @@ void drawMegaPixel(int x, int y) {
 	glEnd();
 }
 
-void swapInts(int &a, int &b) {
-	int temp = a;
-	a = b;
-	b = temp;
-}
-
+// swaps the values of two points
 void swapPoints(My2DPoint &a, My2DPoint &b) {
 	My2DPoint temp = a;
 	a = b;
 	b = temp;
 }
 
+// Draws a tree based on the points in pointAry using normal lines
 void drawTree() {
 	for (int i = 0; i < POINT_ARY_SIZE; i += 2)
 		loeschLineScan(pointAry[i], pointAry[i + 1]);
 }
 
+// Draws a tree based on the points in pointAry using mega pixel lines
 void drawMegaTree() {
 	for (int i = 0; i < POINT_ARY_SIZE; i += 2)
 		loeschLineScanMega(pointAry[i], pointAry[i + 1]);
-}
-
-void drawGrid() {
-	glBegin(GL_LINES);
-	for (int i = 5; i < WINDOW_YS; i += 5) {
-		glVertex2i(0, i);
-		glVertex2i(WINDOW_XS, i);
-		glVertex2i(i, 0);
-		glVertex2i(i, WINDOW_YS);
-	}
-	glEnd();
-}
-
-void drawPoints() {
-	glBegin(GL_POINTS);
-	for (int i = 0; i < POINT_ARY_SIZE; i++)
-		glVertex2i(pointAry[i].x, pointAry[i].y);
-	glEnd();
-}
-
-void lineTest() {
-	My2DPoint testPoint1, testPoint2;
-
-	testPoint1.x = 33;
-	testPoint1.y = 101;
-	testPoint2.x = 33;
-	testPoint2.y = 400;
-	loeschLineScanMega(testPoint1, testPoint2); // vert
-	testPoint1.x = 40;
-	testPoint1.y = 500;
-	testPoint2.x = 270;
-	testPoint2.y = 100;
-	loeschLineScanMega(testPoint1, testPoint2); // -60
-	testPoint1.x = 100;
-	testPoint1.y = 500;
-	testPoint2.x = 500;
-	testPoint2.y = 100;
-	loeschLineScanMega(testPoint1, testPoint2); // -45
-	testPoint1.x = 150;
-	testPoint1.y = 500;
-	testPoint2.x = 500;
-	testPoint2.y = 350;
-	loeschLineScanMega(testPoint1, testPoint2); // -30
-	testPoint1.x = 100;
-	testPoint1.y = 550;
-	testPoint2.x = 500;
-	testPoint2.y = 550;
-	loeschLineScanMega(testPoint1, testPoint2); // horiz
 }
