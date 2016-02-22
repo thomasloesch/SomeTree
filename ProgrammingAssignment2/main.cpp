@@ -233,8 +233,22 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	int currX = 0;
 	int currY = 0;
 
-
-	if(m >= 0.0 && m <= 1.0) { // standard case
+	if (dX == 0) { // vertical line
+		if (p1.y < p2.y) {
+			glBegin(GL_POINTS);
+			for (int i = 0; i < dY; i++)
+				glVertex2i(p1.x, p1.y + i);
+			glEnd();
+		}
+		else
+		{
+			glBegin(GL_POINTS);
+			for (int i = 0; i < dY; i++)
+				glVertex2i(p2.x, p2.y + i);
+			glEnd();
+		}
+	}
+	else if(m >= 0.0 && m <= 1.0) { // standard case
 		dFa = 2 * (dY - dX);
 		dFb = 2 * dY;
 		p = 2 * dY - dX;
@@ -317,7 +331,19 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 	int currX = 0;
 	int currY = 0;
 
-	if (m >= 0.0 && m <= 1.0) { // standard case
+
+	if (dX == 0) { // vertical line
+		if (p1.y < p2.y) {
+			for (int i = 0; i < dY; i++)
+			 drawMegaPixel(p1.x, p1.y + i);
+		}
+		else
+		{
+			for (int i = 0; i < dY; i++)
+				drawMegaPixel(p2.x, p2.y + i);
+		}
+	}
+	else if (m >= 0.0 && m <= 1.0) { // standard case
 		dFa = 10 * dY - 10 * dX;
 		dFb = 10 * dY;
 		p = 10 * dY - 5 * dX;
