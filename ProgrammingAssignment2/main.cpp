@@ -310,20 +310,21 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		glEnd();
 	}
 	else { // slope must be negative and less than -1
-		dFa = 2 * (dY + dX);
+		dY *= -1;
+		dFa = 2 * (dY - dX);
 		dFb = 2 * dX;
-		p = dY - 2 * dX;
+		p = dY * 2 - dX;
 
 		glBegin(GL_POINTS);
 		glVertex2i(p1.x, p1.y);
-		for (int k = 1; k >= dY; k--) {
+		for (int k = 1; k <= dY; k++) {
 			if (p < 0)
 				p += dFb;
 			else {
 				currX++;
 				p += dFa;
 			}
-			glVertex2i(p1.x + currX, p1.y + k);
+			glVertex2i(p1.x + currX, p1.y - k);
 		}
 		glEnd();
 	}
