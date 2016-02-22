@@ -40,6 +40,8 @@ void swapPoints(My2DPoint &a, My2DPoint &b);
 void drawTree();
 void drawMegaTree();
 void drawGrid();
+void drawPoints();
+void lineTest();
 
 
 //@@***********************************************************************************@@
@@ -160,7 +162,6 @@ void display_func(void)
 	glClearColor(0.0, 0.0, 0.0, 1.0);				// background color (white)
 	glClear(GL_COLOR_BUFFER_BIT);					// clearing the buffer not to keep the color
 	
-	glColor3f(0.5, 0.5, 0.5);						// set color (white)
 	glLineWidth(1.0);
 
 	My2DPoint mousePt;
@@ -171,10 +172,16 @@ void display_func(void)
 	//loeschLineScan(pointAry[0], pointAry[1]);
 	//loeschLineScan(pointAry[1], pointAry[5]);
 //	drawMegaPixel(200, 400);
-	drawGrid();
-
-	glColor3f(1.0, 1.0, 1.0);
+	
+	glColor3f(1.0, 1.0, 1.0); // white
 	drawTree();
+	//lineTest();
+
+//  glColor3f(0.5, 0.5, 0.5); // set color (grey)
+//	drawGrid();
+
+	glColor3f(1.0, 0.0, 0.0); // red
+	drawPoints();
 
 	glFlush();
 }	// end of display_func()
@@ -254,7 +261,8 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dY - dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k < dX; k++) {
+		glVertex2i(p1.x, p1.y);
+		for (int k = 1; k <= dX; k++) {
 			if (p < 0) 
 				p += dFb;
 			else {
@@ -271,7 +279,8 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dX - dY;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k < dY; k++) {
+		glVertex2i(p1.x, p1.y);
+		for (int k = 1; k <= dY; k++) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -288,7 +297,8 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = 2 * dY + dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k < dX; k++) {
+		glVertex2i(p1.x, p1.y);
+		for (int k = 1; k <= dX; k++) {
 			if (p > 0)
 				p += dFb;
 			else {
@@ -305,7 +315,8 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 		p = dY - 2 * dX;
 
 		glBegin(GL_POINTS);
-		for (int k = 0; k > dY; k--) {
+		glVertex2i(p1.x, p1.y);
+		for (int k = 1; k >= dY; k--) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -334,12 +345,12 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 
 	if (dX == 0) { // vertical line
 		if (p1.y < p2.y) {
-			for (int i = 0; i < dY; i++)
-			 drawMegaPixel(p1.x, p1.y + i);
+			for (int i = 0; i < dY - (dY % 5); i += 5)
+				drawMegaPixel(p1.x, p1.y + i);
 		}
 		else
 		{
-			for (int i = 0; i < dY; i++)
+			for (int i = 0; i < dY - (dY % 5); i += 5)
 				drawMegaPixel(p2.x, p2.y + i);
 		}
 	}
@@ -348,7 +359,8 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 		dFb = 10 * dY;
 		p = 10 * dY - 5 * dX;
 
-		for (int k = 0; k < dX; k += 5) {
+		drawMegaPixel(p1.x, p1.y);
+		for (int k = 5; k <= dX - (dX % 5); k += 5) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -363,7 +375,8 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 		dFb = 10 * dX;
 		p = 10 * dX - 5 * dY;
 
-		for (int k = 0; k < dY; k += 5) {
+		drawMegaPixel(p1.x, p1.y);
+		for (int k = 5; k <= dY - (dY % 5); k += 5) {
 			if (p < 0)
 				p += dFb;
 			else {
@@ -378,7 +391,8 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 		dFb = 10 * dY;
 		p = 10 * dY + 5 * dX;
 
-		for (int k = 0; k < dX; k += 5) {
+		drawMegaPixel(p1.x, p1.y);
+		for (int k = 5; k <= dX - (dX % 5); k += 5) {
 			if (p > 0)
 				p += dFb;
 			else {
@@ -393,14 +407,15 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 		dFb = 10 * dX;
 		p = 5 * dY - 10 * dX;
 
-		for (int k = 0; k > dY; k -= 5) {
+		drawMegaPixel(p1.x, p1.y);
+		for (int k = 5; k <= dY - (dY % 5); k += 5) {
 			if (p < 0)
 				p += dFb;
 			else {
 				currX += 5;
 				p += dFa;
 			}
-			drawMegaPixel(p1.x + currX, p1.y + k);
+			drawMegaPixel(p1.x + currX, p1.y - k);
 		}
 	}
 }
@@ -446,4 +461,41 @@ void drawGrid() {
 		glVertex2i(i, WINDOW_YS);
 	}
 	glEnd();
+}
+
+void drawPoints() {
+	glBegin(GL_POINTS);
+	for (int i = 0; i < POINT_ARY_SIZE; i++)
+		glVertex2i(pointAry[i].x, pointAry[i].y);
+	glEnd();
+}
+
+void lineTest() {
+	My2DPoint testPoint1, testPoint2;
+
+	testPoint1.x = 33;
+	testPoint1.y = 101;
+	testPoint2.x = 33;
+	testPoint2.y = 400;
+	loeschLineScanMega(testPoint1, testPoint2); // vert
+	testPoint1.x = 40;
+	testPoint1.y = 500;
+	testPoint2.x = 270;
+	testPoint2.y = 100;
+	loeschLineScanMega(testPoint1, testPoint2); // -60
+	testPoint1.x = 100;
+	testPoint1.y = 500;
+	testPoint2.x = 500;
+	testPoint2.y = 100;
+	loeschLineScanMega(testPoint1, testPoint2); // -45
+	testPoint1.x = 150;
+	testPoint1.y = 500;
+	testPoint2.x = 500;
+	testPoint2.y = 350;
+	loeschLineScanMega(testPoint1, testPoint2); // -30
+	testPoint1.x = 100;
+	testPoint1.y = 550;
+	testPoint2.x = 500;
+	testPoint2.y = 550;
+	loeschLineScanMega(testPoint1, testPoint2); // horiz
 }
