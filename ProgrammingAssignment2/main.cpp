@@ -162,26 +162,8 @@ void display_func(void)
 	glClearColor(0.0, 0.0, 0.0, 1.0);				// background color (white)
 	glClear(GL_COLOR_BUFFER_BIT);					// clearing the buffer not to keep the color
 	
-	glLineWidth(1.0);
-
-	My2DPoint mousePt;
-	mousePt.x = _x;
-	mousePt.y = _y;
-	//loeschLineScanMega(pointAry[0], pointAry[1]);
-	//loeschLineScan(pointAry[0], pointAry[5]);
-	//loeschLineScan(pointAry[0], pointAry[1]);
-	//loeschLineScan(pointAry[1], pointAry[5]);
-//	drawMegaPixel(200, 400);
-	
 	glColor3f(1.0, 1.0, 1.0); // white
-	drawTree();
-	//lineTest();
-
-//  glColor3f(0.5, 0.5, 0.5); // set color (grey)
-//	drawGrid();
-
-	glColor3f(1.0, 0.0, 0.0); // red
-	drawPoints();
+	drawMegaTree();
 
 	glFlush();
 }	// end of display_func()
@@ -311,9 +293,9 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	}
 	else { // slope must be negative and less than -1
 		dY *= -1;
-		dFa = 2 * (dY - dX);
+		dFa = 2 * (dX - dY);
 		dFb = 2 * dX;
-		p = dY * 2 - dX;
+		p = dX * 2 - dY;
 
 		glBegin(GL_POINTS);
 		glVertex2i(p1.x, p1.y);
@@ -404,9 +386,10 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 		}
 	}
 	else { // slope must be negative and less than -1
-		dFa = 10 * (dY + dX);
+		dY *= -1;
+		dFa = 10 * (dX - dY);
 		dFb = 10 * dX;
-		p = 5 * dY - 10 * dX;
+		p = 10 * dX - 5 * dY;
 
 		drawMegaPixel(p1.x, p1.y);
 		for (int k = 5; k <= dY - (dY % 5); k += 5) {
