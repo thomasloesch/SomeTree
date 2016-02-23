@@ -41,8 +41,8 @@ void drawMegaTree();
 
 //@@***********************************************************************************@@
 // Global Variables
-const int POINT_ARY_SIZE = 44;
-My2DPoint pointAry[POINT_ARY_SIZE];
+const int POINT_ARY_SIZE = 44;		
+My2DPoint pointAry[POINT_ARY_SIZE];	// hold the points for drawing the tree
 
 //@@***********************************************************************************@@
 int main(int argc, char **argv)
@@ -51,6 +51,7 @@ int main(int argc, char **argv)
 
 	init_setup(WINDOW_XS, WINDOW_YS, WINDOW_NAME);
 	
+	// Initialize the values of the tree
 	pointAry[0].x = 237;
 	pointAry[0].y = 12;
 	pointAry[1].x = 362;
@@ -182,7 +183,7 @@ void mouse_func(int button, int state, int x, int y)
 
 }	// end of mouse_func()
 
-// This is a Bresenham-based linescan function (DOES NOT use mega pixels)
+// [UNUSED] This is a Bresenham-based linescan function (DOES NOT use mega pixels)
 void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 	if (p1.x > p2.x)		// if the points are in the wrong order, swap them first
 		swapPoints(p1, p2);
@@ -287,13 +288,15 @@ void loeschLineScan(My2DPoint p1, My2DPoint p2) {
 }
 
 // This is a Bresenham-based linescan function using mega pixels
+// All cases use similar structure to the standard case, just with different values for dFa, dFb, and p
 void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 	if (p1.x > p2.x)		// if the points are in the wrong order, swap them first
 		swapPoints(p1, p2);
 
+	// declare and initialize values
 	int dY = p2.y - p1.y;
 	int dX = p2.x - p1.x;
-	float m = (float)dY / (float)dX; // slope
+	float m = (float)dY / (float)dX; // calculate and store slope
 	int dFa;
 	int dFb;
 	int p;
@@ -302,39 +305,41 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 
 
 	if (dX == 0) { // vertical line
-		if (p1.y < p2.y) {
+		if (p1.y < p2.y) {	// if p1 is lower, draw starting from p1
 			for (int i = 0; i < dY - (dY % 5); i += 5)
 				drawMegaPixel(p1.x, p1.y + i);
 		}
-		else
+		else				// otherwise draw starting from p2
 		{
 			for (int i = 0; i < dY - (dY % 5); i += 5)
 				drawMegaPixel(p2.x, p2.y + i);
 		}
 	}
-	else if (m >= 0.0 && m <= 1.0) { // standard case
+	else if (m >= 0.0 && m <= 1.0) { // standard case ( 0 <= m <= 1 )
+		// calculate dFa and dFb, as well as the initial value for p
 		dFa = 10 * dY - 10 * dX;
 		dFb = 10 * dY;
 		p = 10 * dY - 5 * dX;
 
+		// draw the initial point
 		drawMegaPixel(p1.x, p1.y);
-		for (int k = 5; k <= dX - (dX % 5); k += 5) {
-			if (p < 0)
+		for (int k = 5; k <= dX - (dX % 5); k += 5) { // k is the current x value
+			if (p < 0)	// if p is below the midpoint, use dFb
 				p += dFb;
-			else {
+			else {		// otherwise p is above midpoint, use dFa
 				currY += 5;
 				p += dFa;
 			}
-			drawMegaPixel(p1.x + k, p1.y + currY);
+			drawMegaPixel(p1.x + k, p1.y + currY); // draw a pixel at the current x and y
 		}
 	}
-	else if (m > 1.0) { // slope greater than 1
+	else if (m > 1.0) { // slope greater than 1 ( m < 1 )
 		dFa = 10 * (dX - dY);
 		dFb = 10 * dX;
 		p = 10 * dX - 5 * dY;
 
 		drawMegaPixel(p1.x, p1.y);
-		for (int k = 5; k <= dY - (dY % 5); k += 5) {
+		for (int k = 5; k <= dY - (dY % 5); k += 5) { // k is the current y value
 			if (p < 0)
 				p += dFb;
 			else {
@@ -344,13 +349,13 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 			drawMegaPixel(p1.x + currX, p1.y + k);
 		}
 	}
-	else if (m < 0.0 && m >= -1.0) { // negative slope
+	else if (m < 0.0 && m >= -1.0) { // negative slope ( 0 < m <= -1 )
 		dFa = 10 * (dY + dX);
 		dFb = 10 * dY;
 		p = 10 * dY + 5 * dX;
 
 		drawMegaPixel(p1.x, p1.y);
-		for (int k = 5; k <= dX - (dX % 5); k += 5) {
+		for (int k = 5; k <= dX - (dX % 5); k += 5) { // k is the current x value
 			if (p > 0)
 				p += dFb;
 			else {
@@ -360,14 +365,14 @@ void loeschLineScanMega(My2DPoint p1, My2DPoint p2) {
 			drawMegaPixel(p1.x + k, p1.y - currY);
 		}
 	}
-	else { // slope must be negative and less than -1
-		dY *= -1;
+	else { // slope must be negative and less than -1 ( m < -1 )
+		dY *= -1;				// make dY positive (in order to emulate the case m < 1)
 		dFa = 10 * (dX - dY);
 		dFb = 10 * dX;
 		p = 10 * dX - 5 * dY;
 
 		drawMegaPixel(p1.x, p1.y);
-		for (int k = 5; k <= dY - (dY % 5); k += 5) {
+		for (int k = 5; k <= dY - (dY % 5); k += 5) { // k is the current y value
 			if (p < 0)
 				p += dFb;
 			else {
@@ -397,7 +402,7 @@ void swapPoints(My2DPoint &a, My2DPoint &b) {
 	b = temp;
 }
 
-// Draws a tree based on the points in pointAry using normal lines
+// [UNUSED] Draws a tree based on the points in pointAry using normal lines
 void drawTree() {
 	for (int i = 0; i < POINT_ARY_SIZE; i += 2)
 		loeschLineScan(pointAry[i], pointAry[i + 1]);
