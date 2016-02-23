@@ -3,7 +3,8 @@
 *** DESCRIPTION : This program generates a tree using a self-made implementation of a Bresenham line scan.
 *** DATE        : Jan. 29 2015
 *** WRITTEN By  : Thomas Loesch
-*** NOTES		: 
+*** NOTES		: This program stores the values for drawing the tree in pointAry, and then draws a tree using the drawMegaTree function.
+***               drawMegaTree utilizes the loeschLineScanMega function, which is a bresenham line scan based algorithm that uses 5x5 pixels instead of 1x1 pixels.
 */
 
 #include <stdio.h>              // standard libraries
