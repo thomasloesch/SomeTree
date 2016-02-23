@@ -44,6 +44,7 @@ void drawMegaTree();
 // Global Variables
 const int POINT_ARY_SIZE = 44;		
 My2DPoint pointAry[POINT_ARY_SIZE];	// hold the points for drawing the tree
+int currPoint;
 
 //@@***********************************************************************************@@
 int main(int argc, char **argv)
@@ -141,6 +142,8 @@ int main(int argc, char **argv)
 	pointAry[42].y = 517;
 	pointAry[43].x = 367;
 	pointAry[43].y = 547;
+
+	currPoint = 0;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -158,7 +161,12 @@ void display_func(void)
 	glClear(GL_COLOR_BUFFER_BIT);					// clearing the buffer not to keep the color
 	
 	glColor3f(1.0, 1.0, 1.0); // white
-	drawMegaTree();
+	if (currPoint == 0)
+		drawMegaTree();
+	else {
+		for (int i = 0; i < currPoint - (currPoint % 2); i += 2)
+			loeschLineScanMega(pointAry[i], pointAry[i + 1]);
+	}
 
 	glFlush();
 }	// end of display_func()
@@ -181,7 +189,14 @@ void keyboard_func(unsigned char c, int x, int y)
 //@@***********************************************************************************@@
 void mouse_func(int button, int state, int x, int y)
 {
+	// if the left mouse button is clicked, add the point to the pointAry
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		pointAry[currPoint].x = x;
+		pointAry[currPoint].y = WINDOW_YS - y;
+		currPoint++;
+	}
 
+	glutPostRedisplay();
 }	// end of mouse_func()
 
 // [UNUSED] This is a Bresenham-based linescan function (DOES NOT use mega pixels)
