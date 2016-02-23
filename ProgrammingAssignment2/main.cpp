@@ -1,10 +1,12 @@
 /*
 *** FILE NAME   : main.cpp
 *** DESCRIPTION : This program generates a tree using a self-made implementation of a Bresenham line scan.
-*** DATE        : Jan. 29 2015
+***				  EXTRA CREDIT: User can draw lines by left clicking on the window.
+*** DATE        : Feb. 23 2015
 *** WRITTEN By  : Thomas Loesch
 *** NOTES		: This program stores the values for drawing the tree in pointAry, and then draws a tree using the drawMegaTree function.
 ***               drawMegaTree utilizes the loeschLineScanMega function, which is a bresenham line scan based algorithm that uses 5x5 pixels instead of 1x1 pixels.
+***				  EXTRA CREDIT: Utilizing pointAry, values from left clicks are stored and then draw. As such, a user can only draw 22 lines.
 */
 
 #include <stdio.h>              // standard libraries
@@ -143,7 +145,7 @@ int main(int argc, char **argv)
 	pointAry[43].x = 367;
 	pointAry[43].y = 547;
 
-	currPoint = 0;
+	currPoint = -1;
 	
 	glutDisplayFunc(display_func);			// call back for display event
 	glutKeyboardFunc(keyboard_func);		// call back for keyboard event
@@ -161,7 +163,7 @@ void display_func(void)
 	glClear(GL_COLOR_BUFFER_BIT);					// clearing the buffer not to keep the color
 	
 	glColor3f(1.0, 1.0, 1.0); // white
-	if (currPoint == 0)
+	if (currPoint < 0)
 		drawMegaTree();
 	else {
 		for (int i = 0; i < currPoint - (currPoint % 2); i += 2)
@@ -189,11 +191,14 @@ void keyboard_func(unsigned char c, int x, int y)
 //@@***********************************************************************************@@
 void mouse_func(int button, int state, int x, int y)
 {
-	// if the left mouse button is clicked, add the point to the pointAry
+	// if the left mouse button is clicked, add the point to the pointAry (extra credit)
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		pointAry[currPoint].x = x;
-		pointAry[currPoint].y = WINDOW_YS - y;
-		currPoint++;
+		if (currPoint == -1) currPoint = 0;
+		if (currPoint < POINT_ARY_SIZE) {		// ensures that the 
+			pointAry[currPoint].x = x;
+			pointAry[currPoint].y = WINDOW_YS - y;
+			currPoint++;
+		}
 	}
 
 	glutPostRedisplay();
